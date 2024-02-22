@@ -138,6 +138,28 @@ open class SetAngle: TurtleCommand {
 }
 
 @available(macOS 10.15, iOS 13.0, *)
+open class Arc : TurtleCommand {
+	public var size: CGFloat
+	public var angle: CGFloat
+	
+	public init(_ size: CGFloat, _ angle: CGFloat) {
+		self.size = size
+		self.angle = angle
+	}
+	
+	public func addToPath(path: inout Path, status: TurtleStatus) {
+		
+		let repeats = angle < 0 ? -angle : angle
+		let movement = size / repeats
+		let rotation = angle / repeats
+		
+		Repeat(Int(repeats), [Rotate(rotation), Forward(movement)]).addToPath(path: &path, status: status)
+	}
+	
+	
+}
+
+@available(macOS 10.15, iOS 13.0, *)
 open class MoveTo : TurtleCommand {
 	public var x: CGFloat, y: CGFloat
 	
