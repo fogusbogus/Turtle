@@ -9,9 +9,13 @@ import SwiftUI
 
 @available(macOS 10.15, iOS 13.0, *)
 open class Turtle {
+	public init() {}
+	public init(commands: [any TurtleCommand]) {
+		self.commands = commands
+	}
 	private var commands: [any TurtleCommand] = []
 	
-	func getPath(measure: CGFloat = 1.0) -> Path {
+	public func getPath(measure: CGFloat = 1.0) -> Path {
 		var path = Path()
 		let status = TurtleStatus(position: CGPoint.zero, angle: 0, penDown: false, measure: measure)
 		commands.forEach { command in
@@ -20,14 +24,14 @@ open class Turtle {
 		return path
 	}
 	
-	func process(_ commandList: [any TurtleCommand]) {
+	public func process(_ commandList: [any TurtleCommand]) {
 		commands.append(contentsOf: commandList)
 	}
 }
 
 @available(macOS 10.15, iOS 13.0, *)
 open class TurtleStatus {
-	init(position: CGPoint, angle: CGFloat, penDown: Bool, measure: CGFloat) {
+	public init(position: CGPoint, angle: CGFloat, penDown: Bool, measure: CGFloat) {
 		self.position = position
 		self.angle = angle
 		self.penDown = penDown
@@ -46,7 +50,7 @@ public protocol TurtleCommand {
 
 @available(macOS 10.15, iOS 13.0, *)
 open class PenDown : TurtleCommand {
-	init() {}
+	public init() {}
 	
 	public func addToPath(path: inout Path, status: TurtleStatus) {
 		status.penDown = true
@@ -55,7 +59,7 @@ open class PenDown : TurtleCommand {
 
 @available(macOS 10.15, iOS 13.0, *)
 open class PenUp : TurtleCommand {
-	init() {}
+	public init() {}
 	
 	public func addToPath(path: inout Path, status: TurtleStatus) {
 		status.penDown = false
@@ -64,9 +68,9 @@ open class PenUp : TurtleCommand {
 
 @available(macOS 10.15, iOS 13.0, *)
 open class Forward: TurtleCommand {
-	var distance: CGFloat
+	public var distance: CGFloat
 	
-	init(_ distance: CGFloat) {
+	public init(_ distance: CGFloat) {
 		self.distance = distance
 	}
 	
@@ -80,10 +84,10 @@ open class Forward: TurtleCommand {
 
 @available(macOS 10.15, iOS 13.0, *)
 open class Repeat: TurtleCommand {
-	var count: Int
-	var commands: [TurtleCommand]
+	public var count: Int
+	public var commands: [TurtleCommand]
 	
-	init(_ count: Int, _ commands: [TurtleCommand]) {
+	public init(_ count: Int, _ commands: [TurtleCommand]) {
 		self.count = count
 		self.commands = commands
 	}
@@ -99,8 +103,8 @@ open class Repeat: TurtleCommand {
 
 @available(macOS 10.15, iOS 13.0, *)
 open class Rotate: TurtleCommand {
-	var rotation: CGFloat
-	init(_ rotation: CGFloat) {
+	public var rotation: CGFloat
+	public init(_ rotation: CGFloat) {
 		self.rotation = rotation
 	}
 	
@@ -117,8 +121,8 @@ open class Rotate: TurtleCommand {
 
 @available(macOS 10.15, iOS 13.0, *)
 open class SetAngle: TurtleCommand {
-	var rotation: CGFloat
-	init(_ rotation: CGFloat) {
+	public var rotation: CGFloat
+	public init(_ rotation: CGFloat) {
 		self.rotation = rotation
 	}
 	
@@ -135,14 +139,14 @@ open class SetAngle: TurtleCommand {
 
 @available(macOS 10.15, iOS 13.0, *)
 open class MoveTo : TurtleCommand {
-	var x: CGFloat, y: CGFloat
+	public var x: CGFloat, y: CGFloat
 	
-	init(_ x: CGFloat, _ y: CGFloat) {
+	public init(_ x: CGFloat, _ y: CGFloat) {
 		self.x = x
 		self.y = y
 	}
 	
-	init(_ xy: CGPoint) {
+	public init(_ xy: CGPoint) {
 		self.x = xy.x
 		self.y = xy.y
 	}
