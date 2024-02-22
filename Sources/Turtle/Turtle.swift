@@ -37,10 +37,10 @@ open class TurtleStatus {
 		self.penDown = penDown
 		self.measure = measure
 	}
-	var position: CGPoint
-	var angle: CGFloat
-	var penDown: Bool
-	var measure: CGFloat
+	public var position: CGPoint
+	public var angle: CGFloat
+	public var penDown: Bool
+	public var measure: CGFloat
 }
 
 @available(macOS 10.15, iOS 13.0, *)
