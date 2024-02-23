@@ -162,20 +162,38 @@ open class Arc : TurtleCommand {
 @available(macOS 10.15, iOS 13.0, *)
 open class MoveTo : TurtleCommand {
 	public var x: CGFloat, y: CGFloat
+	public var cx: CGFloat?, cy: CGFloat?
 	
 	public init(_ x: CGFloat, _ y: CGFloat) {
 		self.x = x
 		self.y = y
+	}
+	public init(_ x: CGFloat, _ y: CGFloat, _ cx: CGFloat, _ cy: CGFloat) {
+		self.x = x
+		self.y = y
+		self.cx = cx
+		self.cy = cy
 	}
 	
 	public init(_ xy: CGPoint) {
 		self.x = xy.x
 		self.y = xy.y
 	}
+	public init(_ xy: CGPoint, _ cxy: CGPoint) {
+		self.x = xy.x
+		self.y = xy.y
+		self.cx = cxy.x
+		self.cy = cxy.y
+	}
 	
 	public func addToPath(path: inout Path, status: TurtleStatus) {
 		if status.penDown {
-			path.addLine(to: CGPoint(x: x * status.measure, y: y * status.measure))
+			if let cx = cx, let cy = cy {
+				path.addQuadCurve(to: CGPoint(x: x * status.measure, y: y * status.measure), control: CGPoint(x: cx * status.measure, y: cy * status.measure))
+			}
+			else {
+				path.addLine(to: CGPoint(x: x * status.measure, y: y * status.measure))
+			}
 		}
 		else {
 			path.move(to: CGPoint(x: x * status.measure, y: y * status.measure))
