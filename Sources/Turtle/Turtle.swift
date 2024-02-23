@@ -42,6 +42,7 @@ open class TurtleStatus {
 	public var penDown: Bool
 	public var measure: CGFloat
 	public var origin: CGPoint = CGPoint.zero
+	public var home: CGPoint = CGPoint.zero
 }
 
 @available(macOS 10.15, iOS 13.0, *)
@@ -70,10 +71,25 @@ open class Home : TurtleCommand {
 	public init() {}
 	
 	public func addToPath(path: inout Path, status: TurtleStatus) {
-		MoveTo(status.origin).addToPath(path: &path, status: status)
+		MoveTo(status.home).addToPath(path: &path, status: status)
 	}
 }
 
+@available(macOS 10.15, iOS 13.0, *)
+open class SetHome : TurtleCommand {
+	
+	public var point: CGPoint?
+	
+	public init() {}
+	public init(_ x: CGFloat, _ y: CGFloat) {
+		point = CGPoint(x: x, y: y)
+	}
+	
+	public func addToPath(path: inout Path, status: TurtleStatus) {
+		let home = point ?? status.position
+		status.home = CGPoint(x: home.x - status.origin.x, y: home.y - status.origin.y)
+	}
+}
 
 
 @available(macOS 10.15, iOS 13.0, *)
@@ -217,15 +233,15 @@ open class MoveTo : TurtleCommand {
 	public func addToPath(path: inout Path, status: TurtleStatus) {
 		if status.penDown {
 			if let cx = cx, let cy = cy {
-				path.addQuadCurve(to: CGPoint(x: x * status.measure, y: y * status.measure), control: CGPoint(x: cx * status.measure, y: cy * status.measure))
+				path.addQuadCurve(to: CGPoint(x: (status.origin.x + x) * status.measure, y: (status.origin.y + y) * status.measure), control: CGPoint(x: (status.origin.x + cx) * status.measure, y: (status.origin.y + cy) * status.measure))
 			}
 			else {
-				path.addLine(to: CGPoint(x: x * status.measure, y: y * status.measure))
+				path.addLine(to: CGPoint(x: (status.origin.x + x) * status.measure, y: (status.origin.y + y) * status.measure))
 			}
 		}
 		else {
-			path.move(to: CGPoint(x: x * status.measure, y: y * status.measure))
+			path.move(to: CGPoint(x: (status.origin.x + x) * status.measure, y: (status.origin.y + y) * status.measure))
 		}
-		status.position = CGPoint(x: x, y: y)
+		status.position = CGPoint(x: x - status.origin.x, y: y - status.origin.y)
 	}
 }
