@@ -253,6 +253,6 @@ open class MoveTo : TurtleCommand {
 		else {
 			path.move(to: CGPoint(x: (status.origin.x + x) * status.measure, y: (status.origin.y + y) * status.measure))
 		}
-		status.position = CGPoint(x: x - status.origin.x, y: y - status.origin.y)
+		status.position = CGPoint(x: x, y: y)
 	}
 }
