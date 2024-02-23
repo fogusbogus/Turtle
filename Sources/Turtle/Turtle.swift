@@ -86,8 +86,7 @@ open class SetHome : TurtleCommand {
 	}
 	
 	public func addToPath(path: inout Path, status: TurtleStatus) {
-		let home = point ?? status.position
-		status.home = CGPoint(x: home.x - status.origin.x, y: home.y - status.origin.y)
+		status.home = point ?? status.position
 	}
 }
 
