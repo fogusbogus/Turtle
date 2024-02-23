@@ -41,12 +41,40 @@ open class TurtleStatus {
 	public var angle: CGFloat
 	public var penDown: Bool
 	public var measure: CGFloat
+	public var origin: CGPoint = CGPoint.zero
 }
 
 @available(macOS 10.15, iOS 13.0, *)
 public protocol TurtleCommand {
 	func addToPath(path: inout Path, status: TurtleStatus)
 }
+
+@available(macOS 10.15, iOS 13.0, *)
+open class SetOrigin : TurtleCommand {
+	
+	public var point: CGPoint?
+	
+	public init() {}
+	public init(_ x: CGFloat, _ y: CGFloat) {
+		point = CGPoint(x: x, y: y)
+	}
+	
+	public func addToPath(path: inout Path, status: TurtleStatus) {
+		status.origin = point ?? status.position
+	}
+}
+
+@available(macOS 10.15, iOS 13.0, *)
+open class Home : TurtleCommand {
+	
+	public init() {}
+	
+	public func addToPath(path: inout Path, status: TurtleStatus) {
+		MoveTo(status.origin).addToPath(path: &path, status: status)
+	}
+}
+
+
 
 @available(macOS 10.15, iOS 13.0, *)
 open class PenDown : TurtleCommand {
