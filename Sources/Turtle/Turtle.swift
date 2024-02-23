@@ -53,15 +53,21 @@ public protocol TurtleCommand {
 @available(macOS 10.15, iOS 13.0, *)
 open class SetOrigin : TurtleCommand {
 	
-	public var point: CGPoint?
+	public var x: CGFloat?, y: CGFloat?
 	
 	public init() {}
 	public init(_ x: CGFloat, _ y: CGFloat) {
-		point = CGPoint(x: x, y: y)
+		self.x = x
+		self.y = y
 	}
 	
 	public func addToPath(path: inout Path, status: TurtleStatus) {
-		status.origin = point ?? status.position
+		if let x = x, let y = y {
+			status.origin = CGPoint(x: x, y: y)
+		}
+		else {
+			status.origin = status.position
+		}
 	}
 }
 
@@ -78,15 +84,21 @@ open class Home : TurtleCommand {
 @available(macOS 10.15, iOS 13.0, *)
 open class SetHome : TurtleCommand {
 	
-	public var point: CGPoint?
+	public var x: CGFloat?, y: CGFloat?
 	
 	public init() {}
 	public init(_ x: CGFloat, _ y: CGFloat) {
-		point = CGPoint(x: x, y: y)
+		self.x = x
+		self.y = y
 	}
 	
 	public func addToPath(path: inout Path, status: TurtleStatus) {
-		status.home = point ?? status.position
+		if let x = x, let y = y {
+			status.home = CGPoint(x: x, y: y)
+		}
+		else {
+			status.home = status.position
+		}
 	}
 }
 
