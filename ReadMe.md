@@ -2,6 +2,8 @@
 
 (c) 2024 Matt Hogg
 
+Version: 1.0
+
 ## Example Usage
 
 ```
